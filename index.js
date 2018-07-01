@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 
+const { routeApp } = require('./routes/index');
+
 const app = express();
 
 app.use(
@@ -20,6 +22,8 @@ app.use(
     origin: CLIENT_ORIGIN
   })
 );
+
+app.use(routeApp);
 
 function runServer(port = PORT) {
   const server = app
