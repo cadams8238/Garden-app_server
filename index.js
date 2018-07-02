@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 
-const { routeApp } = require('./routes/index');
+const routeApp = require('./routes/index');
 
 const app = express();
 
@@ -16,6 +16,8 @@ app.use(
     skip: (req, res) => process.env.NODE_ENV === 'test'
   })
 );
+
+app.use(express.json());
 
 app.use(
   cors({

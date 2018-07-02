@@ -1,8 +1,11 @@
 'use strict';
 
+require('dotenv').config();
+
 module.exports = {
   PORT: process.env.PORT || 8080,
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+  WEATHER_API_KEY: process.env.WEATHER_API_KEY,
   DATABASE_URL:
         process.env.DATABASE_URL || 'mongodb://localhost/thinkful-backend',
   TEST_DATABASE_URL:
