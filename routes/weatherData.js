@@ -4,11 +4,11 @@ const fetch = require('isomorphic-fetch');
 const { WEATHER_API_KEY } = require('../config');
 const WEATHER_API_URL = 'http://api.openweathermap.org/data/2.5/forecast?q=Portland&mode=json&APPID=';
 
-// router.get('/', (req, res, next) => {
-//     res.send({message: 'hi'})
-// })
+router.get('/testData', (req, res, next) => {
+    res.send({data: 'hello'})
+})
 
-router.get('/', (req, res, next) => {
+router.get('/weatherData', (req, res, next) => {
     fetch(`${WEATHER_API_URL}${WEATHER_API_KEY}`)
     .then(response => response.json())
     .then(jsonData => {

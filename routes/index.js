@@ -7,7 +7,7 @@ routeApp.get('/', (req, res) => {
     res.send({msg: 'hello! Server is up and running'});
 });
 
-routeApp.use('/weatherData', weatherData);
+routeApp.use('/', weatherData);
 
 //Custom [404: Not Found] error handler
 routeApp.use((req, res, next) => {
