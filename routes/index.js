@@ -3,16 +3,18 @@ const routeApp = require('express')();
 
 const weatherData = require('./weatherData');
 const task = require('./task');
-const user = require('./users');
+const users = require('./users');
+const auth = require('./auth');
 
 //sanity check
 routeApp.get('/', (req, res) => {
     res.send({msg: 'hello! Server is up and running'});
 });
 
+routeApp.use('/', auth);
 routeApp.use('/weatherData', weatherData);
 routeApp.use('/task', task);
-routeApp.use('./user', user);
+routeApp.use('/users', users);
 
 
 //Custom [404: Not Found] error handler

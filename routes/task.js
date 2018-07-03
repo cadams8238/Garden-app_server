@@ -8,6 +8,7 @@ const Task = require('../models/task');
 
 
 router.get('/', (req, res, next) => {
+    
     Task.find()
         .then(results => {
             console.log(results)
