@@ -5,6 +5,14 @@ const router = express.Router();
 
 const User = require('../models/users');
 
+
+router.get('/', (req, res, next) => {
+
+    User.find()
+        .then(results => res.json(results))
+        .catch(err => next(err));
+})
+
 router.post('/', (req, res, next) => {
     let { username, password } = req.body;
 

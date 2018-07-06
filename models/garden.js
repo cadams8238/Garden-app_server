@@ -4,9 +4,12 @@ const gardenSchema = new mongoose.Schema({
     name: { type: String, required: true },
     location: { type: String, required: true },
     description: String,
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task'}],
+    // tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task'}],
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 })
+
+//adds 'createdAt' and 'updatedAt' fields
+gardenSchema.set('timestamps', true);
 
 gardenSchema.set('toObject', {
     virtuals: true,
