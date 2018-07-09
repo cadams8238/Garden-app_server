@@ -3,7 +3,10 @@ const router = express.Router();
 const fetch = require('isomorphic-fetch');
 
 const { WEATHER_API_KEY } = require('../config');
-const WEATHER_API_URL = 'http://api.openweathermap.org/data/2.5/forecast?q=Portland&mode=json&APPID=';
+// const WEATHER_API_URL = 'http://api.openweathermap.org/data/2.5/forecast?q=Portland&mode=json&APPID=';
+//current weather 3hr forecast
+const WEATHER_API_URL = 'http://api.openweathermap.org/data/2.5/weather?zip=97211&mode=json&APPID=';
+
 
 // router.get('/testData', (req, res, next) => {
 //     res.send({data: 'hello'})
