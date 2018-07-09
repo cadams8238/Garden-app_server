@@ -42,9 +42,9 @@ router.get('/:id', (req, res, next) => {
 
 
 router.post('/', (req, res, next) => {
-    const { name, location, description } = req.body;
+    const { name, location, zipcode, description } = req.body;
     const userId = req.user.id;
-    const newGarden = { name, location, description, userId };
+    const newGarden = { name, location, zipcode, description, userId };
     // let newGarden;
     // newGarden = !description ?
     //     { name, location } :
