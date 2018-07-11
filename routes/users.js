@@ -51,7 +51,7 @@ router.post('/', (req, res, next) => {
 	if(password.length < 6 || password.length > 72) {
 		return res.status(422).json({
 	      code: 422,
-	      reason: 'Validation Error',
+	      reason: 'ValidationError',
 	      message: '`password` needs to be more than 6 characters and less than 72'
 	    });
 	}
@@ -68,8 +68,15 @@ router.post('/', (req, res, next) => {
         })
         .catch(err => {
             if (err.code === 11000) {
-                err = new Error('The username already exists');
-		        err.status = 400;
+                return res.status(400).json({
+                    reason: 'ValidationError',
+                    message: 'The username already exists',
+                    location: 'username'
+                })
+                // err = new Error('The username already exists');
+		        // err.status = 400;
+                // err.reason = 'ValidationError';
+                // err.location = 'username';
 	    	}
 			next(err);
 		});
