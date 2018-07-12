@@ -6,12 +6,12 @@ const router = express.Router();
 const User = require('../models/users');
 
 
-router.get('/', (req, res, next) => {
-
-    User.find()
-        .then(results => res.json(results))
-        .catch(err => next(err));
-})
+// router.get('/', (req, res, next) => {
+//
+//     User.find()
+//         .then(results => res.json(results))
+//         .catch(err => next(err));
+// })
 
 router.post('/', (req, res, next) => {
     let { username, password } = req.body;
@@ -51,7 +51,7 @@ router.post('/', (req, res, next) => {
 	if(password.length < 6 || password.length > 72) {
 		return res.status(422).json({
 	      code: 422,
-	      reason: 'ValidationError',
+	      reason: 'Validation Error',
 	      message: '`password` needs to be more than 6 characters and less than 72'
 	    });
 	}
@@ -69,14 +69,10 @@ router.post('/', (req, res, next) => {
         .catch(err => {
             if (err.code === 11000) {
                 return res.status(400).json({
-                    reason: 'ValidationError',
+                    reason: 'Validation Error',
                     message: 'The username already exists',
                     location: 'username'
                 })
-                // err = new Error('The username already exists');
-		        // err.status = 400;
-                // err.reason = 'ValidationError';
-                // err.location = 'username';
 	    	}
 			next(err);
 		});

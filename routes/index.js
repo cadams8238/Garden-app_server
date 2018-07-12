@@ -29,7 +29,7 @@ routeApp.use((req, res, next) => {
 
 //Custom error handler
 routeApp.use((err, req, res, next) => {
-    console.error(err);
+    // console.error(err);
     if(err.status) {
         const errBody = {
             ...err,
