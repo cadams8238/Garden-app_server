@@ -1,0 +1,16 @@
+[
+    {
+        "name": "My Garden",
+        "location": "Portland",
+        "zipcode": "97211",
+        "description": "Shared garden between my neighbor and I",
+        "userId": "333333333333333333333300"
+    },
+    {
+        "name": "Porch Garden",
+        "location": "Astoria",
+        "zipcode": "97103",
+        "description": "Tiny garden that lives on my porch",
+        "userId": "333333333333333333333301"
+    }
+]
