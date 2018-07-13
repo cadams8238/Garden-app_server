@@ -72,9 +72,12 @@ describe.only('Garden App - Gardens', function() {
                 res.body.forEach(function(garden, index) {
                     // console.log(garden.userId) -- userId is an object {username, id}
                     expect(garden).to.be.an('object');
-                    expect(garden).to.contain.keys('name', 'location', 'zipcode', 'userId', 'createdAt', 'updatedAt', 'id');
+                    expect(garden).to.contain.keys('name', 'location', 'zipcode', 'description', 'userId', 'createdAt', 'updatedAt', 'id');
                     expect(garden.id).to.equal(data[index].id);
                     expect(garden.name).to.equal(data[index].name);
+                    expect(garden.location).to.equal(data[index].location);
+                    expect(garden.zipcode).to.equal(data[index].zipcode);
+                    expect(garden.description).to.equal(data[index].description);
                     expect(garden.userId.id).to.equal(data[index].userId.toString());
                     expect(new Date(garden.createdAt)).to.eql(data[index].createdAt);
                     expect(new Date(garden.updatedAt)).to.eql(data[index].updatedAt);
@@ -82,4 +85,31 @@ describe.only('Garden App - Gardens', function() {
             });
         });
     });
+
+    describe('GET /garden/:id', function() {
+        it('Should correctly return one garden', function() {
+            let data;
+            return Garden.findOne({userId: user.id})
+                .then(_data => {
+                    data = _data;
+                    return chai.request(app)
+                        .get(`/garden/${data.id}`)
+                        .set('Authorization', `Bearer ${token}`);
+                })
+                .then((res) => {
+                    expect(res).to.have.status(200);
+                    expect(res).to.be.json;
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.contain.keys('name', 'location', 'zipcode', 'description', 'userId', 'createdAt', 'updatedAt', 'id');
+                    expect(res.body.id).to.equal(data.id);
+                    expect(res.body.name).to.equal(data.name);
+                    expect(res.body.location).to.equal(data.location);
+                    expect(res.body.zipcode).to.equal(data.zipcode);
+                    expect(res.body.description).to.equal(data.description);
+                    expect(res.body.userId).to.equal(data.userId.toString());
+                    expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
+                    expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
+                })
+        })
+    })
 });
