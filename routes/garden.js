@@ -50,11 +50,40 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
     const { name, location, zipcode, description } = req.body;
     const userId = req.user.id;
-    const newGarden = { name, location, zipcode, description, userId };
-    // let newGarden;
-    // newGarden = !description ?
-    //     { name, location } :
-    //     { name, location, description}
+    let newGarden = { name, location, zipcode, userId };
+
+    // const newGarden = !description ?
+    //     { name, location, zipcode, userId } :
+    //     { name, location, zipcode, description, userId}
+
+    if(!name) {
+        return res.status(400).json({
+            reason: 'Validation Error',
+            message: '`name` is not defined',
+            location: 'name'
+        })
+    }
+
+    if(!zipcode) {
+        return res.status(400).json({
+            reason: 'Validation Error',
+            message: '`zipcode` is not defined',
+            location: 'zipcode'
+        })
+    }
+
+    if(!location) {
+        return res.status(400).json({
+            reason: 'Validation Error',
+            message: '`location` is not defined',
+            location: 'location'
+        })
+    }
+
+
+    if(description) {
+        newGarden.description = description;
+    }
 
     Garden.create(newGarden)
         .then(result => {

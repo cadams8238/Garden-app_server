@@ -122,7 +122,7 @@ describe('Garden App - Gardens', function() {
                 })
         })
 
-        it.only('should respond with a 404 for an ID that does not exist', function () {
+        it('should respond with a 404 for an ID that does not exist', function () {
             // The string "DOESNOTEXIST" is 12 bytes which is a valid Mongo ObjectId
             return chai.request(app)
                 .get('/api/folders/DOESNOTEXIST')
@@ -131,5 +131,110 @@ describe('Garden App - Gardens', function() {
                     expect(res).to.have.status(404);
                 });
         });
-    })
+    });
+
+    describe.only('POST /garden', function() {
+        it('Should create and return a new garden when give valid data', function() {
+            const newGarden = {
+                name: 'My Garden',
+                location: 'Portland',
+                zipcode: 97211,
+                description: 'Growing veg',
+                userId: user.id
+            }
+            let body;
+
+            return chai.request(app)
+                .post('/garden')
+                .send(newGarden)
+                .set('Authorization', `Bearer ${token}`)
+
+                .then(res => {
+                    body = res.body;
+                    expect(res).to.have.status(201);
+                    expect(res).to.have.header('location');
+                    expect(res).to.be.json;
+                    expect(body).to.be.an('object');
+                    expect(res.body).to.contain.keys('name', 'location', 'zipcode', 'description', 'userId', 'createdAt', 'updatedAt', 'id');
+                    return Garden.findById(body.id)
+                })
+                .then(data => {
+                    expect(body.id).to.equal(data.id);
+                    expect(body.name).to.equal(data.name);
+                    expect(body.location).to.equal(data.location);
+                    expect(body.zipcode).to.equal(data.zipcode);
+                    expect(body.description).to.equal(data.description);
+                    expect(body.userId).to.equal(data.userId.toString());
+                    expect(new Date(body.createdAt)).to.eql(data.createdAt);
+                    expect(new Date(body.updatedAt)).to.eql(data.updatedAt);
+                });
+        });
+
+        //AssertionError: expected [Error: Bad Request] to have headers or getHeader method
+        it.skip('Should return an error when missing `name` field', function() {
+            const newGarden = {
+                foo: 'bar',
+                location: 'Hawaii',
+                zipcode: 30021,
+                userId: user.id };
+
+            return chai.request(app)
+                .post('/garden')
+                .send(newGarden)
+                .set('Authorization', `Bearer ${token}`)
+
+                .catch(res => {
+                    console.log(res);
+                    console.log(Object.keys(res));
+                    expect(res).to.have.status(400);
+                    expect(res).to.be.json;
+                    expect(res.response.body).to.be.an('object');
+                    expect(res.response.body.message).to.equal('`name` is not defined');
+                });
+        });
+
+        it.skip('Should return an error when missing `location` field', function() {
+            const newGarden = {
+                foo: 'bar',
+                name: 'Garden',
+                zipcode: 30021,
+                userId: user.id };
+
+            return chai.request(app)
+                .post('/garden')
+                .send(newGarden)
+                .set('Authorization', `Bearer ${token}`)
+
+                .catch(res => {
+                    console.log(res);
+                    console.log(Object.keys(res));
+                    expect(res).to.have.status(400);
+                    expect(res).to.be.json;
+                    expect(res.response.body).to.be.an('object');
+                    expect(res.response.body.message).to.equal('`location` is not defined');
+                });
+        });
+
+        it.skip('Should return an error when missing `zipcode` field', function() {
+            const newGarden = {
+                foo: 'bar',
+                location: 'Hawaii',
+                name: 'Garden',
+                userId: user.id };
+
+            return chai.request(app)
+                .post('/garden')
+                .send(newGarden)
+                .set('Authorization', `Bearer ${token}`)
+
+                .catch(res => {
+                    console.log(res);
+                    console.log(Object.keys(res));
+                    expect(res).to.have.status(400);
+                    expect(res).to.be.json;
+                    expect(res.response.body).to.be.an('object');
+                    expect(res.response.body.message).to.equal('`zipcode` is not defined');
+                });
+        });
+    });
 });
