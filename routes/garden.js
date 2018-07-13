@@ -22,17 +22,12 @@ router.get('/:id', (req, res, next) => {
     const { id } = req.params;
     const userId = req.user.id;
 
-    console.log(!mongoose.Types.ObjectId.isValid(id));
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        console.log(id);
         return res.status(400).json({
             code: 400,
             message: 'The `id` is not valid'
         })
-        // const err = new Error('The `id` is not valid');
-        // err.status = 400;
-        // return next(err);
-      }
+    }
 
     Garden.findOne({_id: id, userId})
         .then(result => {
@@ -98,6 +93,13 @@ router.post('/', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     const { id } = req.params;
     const userId = req.user.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            code: 400,
+            message: 'The `id` is not valid'
+        })
+    }
 
     Garden.findOneAndRemove({_id: id, userId})
         .then(() => {

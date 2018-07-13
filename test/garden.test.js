@@ -133,7 +133,7 @@ describe('Garden App - Gardens', function() {
         });
     });
 
-    describe.only('POST /garden', function() {
+    describe('POST /garden', function() {
         it('Should create and return a new garden when give valid data', function() {
             const newGarden = {
                 name: 'My Garden',
@@ -234,6 +234,47 @@ describe('Garden App - Gardens', function() {
                     expect(res).to.be.json;
                     expect(res.response.body).to.be.an('object');
                     expect(res.response.body.message).to.equal('`zipcode` is not defined');
+                });
+        });
+    });
+
+    describe('DELETE /garden/:id', function() {
+        it('Should delete an existing garden and respond with 204 status code', function() {
+            let data;
+            return Garden.findOne()
+                .then(_data => {
+                    data = _data;
+                    return chai.request(app)
+                        .delete(`/garden/${data.id}`)
+                        .set('Authorization', `Bearer ${token}`)
+                })
+                .then(res => {
+                    expect(res).to.have.status(204);
+                    expect(res.body).to.be.empty;
+                    return Garden.count({_id: data.id});
+                })
+                .then(count => {
+                    expect(count).to.equal(0);
+                });
+        });
+
+        it('Should respond with a 400 for an invalid id', function() {
+            return chai.request(app)
+                .get('/garden/NOT-A-VALID-ID')
+                .set('Authorization', `Bearer ${token}`)
+                .catch(res => {
+                    expect(res).to.have.status(400);
+                    expect(res.response.body.message).to.equal('The `id` is not valid');
+                })
+        })
+
+        it('should respond with a 404 for an ID that does not exist', function () {
+            // The string "DOESNOTEXIST" is 12 bytes which is a valid Mongo ObjectId
+            return chai.request(app)
+                .get('/api/folders/DOESNOTEXIST')
+                .set('Authorization', `Bearer ${token}`)
+                .catch(res => {
+                    expect(res).to.have.status(404);
                 });
         });
     });
