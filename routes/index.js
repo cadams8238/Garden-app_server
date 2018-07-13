@@ -33,7 +33,7 @@ routeApp.use((err, req, res, next) => {
     if(err.status) {
         const errBody = {
             ...err,
-            message: 'Internal Server Error'
+            message: err.message
         }
         res.status(err.status).json(errBody);
     } else {

@@ -22,10 +22,16 @@ router.get('/:id', (req, res, next) => {
     const { id } = req.params;
     const userId = req.user.id;
 
+    console.log(!mongoose.Types.ObjectId.isValid(id));
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        const err = new Error('The `id` is not valid');
-        err.status = 400;
-        return next(err);
+        console.log(id);
+        return res.status(400).json({
+            code: 400,
+            message: 'The `id` is not valid'
+        })
+        // const err = new Error('The `id` is not valid');
+        // err.status = 400;
+        // return next(err);
       }
 
     Garden.findOne({_id: id, userId})

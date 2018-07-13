@@ -16,7 +16,7 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 
-describe.only('Garden App - Gardens', function() {
+describe('Garden App - Gardens', function() {
     let token;
     let user;
 
@@ -111,5 +111,25 @@ describe.only('Garden App - Gardens', function() {
                     expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
                 })
         })
+
+        it('Should respond with a 400 for an invalid id', function() {
+            return chai.request(app)
+                .get('/garden/NOT-A-VALID-ID')
+                .set('Authorization', `Bearer ${token}`)
+                .catch(res => {
+                    expect(res).to.have.status(400);
+                    expect(res.response.body.message).to.equal('The `id` is not valid');
+                })
+        })
+
+        it.only('should respond with a 404 for an ID that does not exist', function () {
+            // The string "DOESNOTEXIST" is 12 bytes which is a valid Mongo ObjectId
+            return chai.request(app)
+                .get('/api/folders/DOESNOTEXIST')
+                .set('Authorization', `Bearer ${token}`)
+                .catch(res => {
+                    expect(res).to.have.status(404);
+                });
+        });
     })
 });
